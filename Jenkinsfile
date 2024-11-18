@@ -17,7 +17,7 @@ pipeline {
                 sh '''
                   #!/bin/sh
                   flutter build apk --release
-                  '''
+                '''
             }
         }
         stage('DISTRIBUTE') {
@@ -25,7 +25,7 @@ pipeline {
                 appCenter apiToken: 'ee64cfc12d27630d8d2fdc03ad631b75e61fea86',
                         ownerName: 'sonuraj909',
                         appName: 'Sample',
-                        pathToApp: ' build\app\outputs\flutter-apk\app-release.apk',
+                        pathToApp: 'build/app/outputs/flutter-apk/app-release.apk', // Corrected path
                         distributionGroups: 'AlphaTester'
             }
         }
