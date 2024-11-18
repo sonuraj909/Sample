@@ -1,0 +1,29 @@
+workflows:
+  build_and_distribute_android:
+    name: Build, Test, and Distribute Android App
+    max_build_duration: 60 # Set max build duration in minutes
+    environments:
+      flutter: stable # Use the stable Flutter version
+    triggers:
+      - push # Trigger builds on every push
+      - pull_request # Trigger builds on pull requests
+    scripts:
+      - flutter pub get # Get dependencies
+      - flutter test # Run tests
+    android:
+      # Set up the Android build
+      build:
+        android:
+          release: false # Build in debug mode (not release)
+    artifacts:
+      - build/app/outputs/flutter-apk/app-debug.apk # Android APK for testers
+    # publish:
+    #   # Publish the APK to Firebase App Distribution for testers
+    #   firebase:
+    #     project_id: "<your-firebase-project-id>"
+    #     token: "<your-firebase-token>"
+    #     app_distribution:
+    #       android:
+    #         app_id: "<your-firebase-android-app-id>"
+    #         testers: "tester1@example.com,tester2@example.com"  # Add tester email addresses
+    #         groups: "Testers"  # Optional: You can use tester groups if set up in Firebase
