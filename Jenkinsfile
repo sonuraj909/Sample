@@ -1,5 +1,8 @@
 pipeline {
     agent any
+ environment {
+        PATH = "C:\\flutter_windows_3.24.1-stable\\flutter\\bin;${env.PATH}"
+    }
 
     stages {
         stage('GIT PULL') {
