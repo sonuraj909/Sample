@@ -1,11 +1,8 @@
 pipeline {
     agent any
-    tools {
-        flutter 'flutter-sdk'  // Ensure Flutter SDK is configured in Jenkins global tools
-    }
     environment {
-        // Set the Flutter SDK version (based on your environment setup)
-        FLUTTER_VERSION = '^3.5.1'
+        // You can directly specify the Flutter SDK path if it's installed on the system
+        FLUTTER_HOME = 'C:/flutter'  // Set this path based on where Flutter is installed on your Jenkins server
     }
     stages {
         stage('GIT PULL') {
@@ -15,8 +12,15 @@ pipeline {
         }
         stage('SETUP ENVIRONMENT') {
             steps {
-                // You can run commands to install specific dependencies based on version or perform any environment setup
-                bat 'flutter doctor'  // Check Flutter setup
+                // Set the PATH to include Flutter SDK so the flutter command is available
+                script {
+                    def flutterBin = "${env.FLUTTER_HOME}/bin"
+                    if (!fileExists("${flutterBin}/flutter")) {
+                        error "Flutter SDK not found in the specified path."
+                    }
+                    env.PATH = "${flutterBin}:${env.PATH}"
+                }
+                bat 'flutter doctor'  // Ensure Flutter is installed correctly
                 bat 'flutter pub get'  // Install dependencies based on pubspec.yaml
             }
         }
