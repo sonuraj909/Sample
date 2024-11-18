@@ -1,19 +1,32 @@
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('GIT PULL') {
             steps {
-                echo 'Building...'
+                git branch: "develop", url: 'https://github.com/sonuraj909/Sample.git'
             }
         }
-        stage('Test') {
+        stage('TEST') {
             steps {
-                echo 'Testing...'
+                sh 'flutter test'
             }
         }
-        stage('Deploy') {
+        stage('BUILD') {
             steps {
-                echo 'Deploying...'
+                sh '''
+                  #!/bin/sh
+                  flutter build apk --release
+                  '''
+            }
+        }
+        stage('DISTRIBUTE') {
+            steps {
+                appCenter apiToken: 'ee64cfc12d27630d8d2fdc03ad631b75e61fea86',
+                        ownerName: 'sonuraj909',
+                        appName: 'Sample',
+                        pathToApp: ' build\app\outputs\flutter-apk\app-release.apk',
+                        distributionGroups: 'AlphaTester'
             }
         }
     }
