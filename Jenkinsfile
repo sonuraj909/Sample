@@ -10,6 +10,13 @@ pipeline {
                 git branch: "main", url: 'https://github.com/sonuraj909/Sample.git'
             }
         }
+        stage('Flutter Doctor') {
+    steps {
+        bat 'flutter doctor'
+    }
+}
+
+
         stage('TEST') {
             steps {
                 bat  'flutter test'
